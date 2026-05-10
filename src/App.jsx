@@ -35,6 +35,20 @@ function formatWaterTempCAndF(tempC, coldSteep) {
   return coldSteep ? `${core} (steep)` : core
 }
 
+/** Predicted extraction yield (%): ratio-first; same curve for all batch methods. */
+function extractionYieldFromRatio(espresso, ratioNum) {
+  if (espresso) {
+    const refR = 2
+    const refY = 20.9
+    // Higher beverage:dose tends to track more water through the puck → slightly higher yield.
+    return refY + (ratioNum - refR) * 0.9
+  }
+  const refR = 16.5
+  const refY = 21
+  // More brew water per g coffee → gentler/lighter extraction in the glass (% from grounds).
+  return refY - (ratioNum - refR) * 0.45
+}
+
 function computeSpecs({
   mode,
   dose,
@@ -55,7 +69,6 @@ function computeSpecs({
   const espresso = mode === 'espresso'
 
   let tds = espresso ? 9.8 : 1.28
-  let yieldPct = espresso ? 20.8 : 21.1
   let tempC = espresso ? 92.5 : 94
   let grind = espresso ? 'Fine' : 'Medium-fine'
   let brewTime = espresso ? '25 - 32 s' : '2:45 - 3:15'
@@ -65,8 +78,12 @@ function computeSpecs({
     grind = 'Coarse'
     brewTime = '14 - 18 hrs'
     tds = 2.4
-    yieldPct = 22.4
   }
+
+  const ratioNum = waterOrYield / dose
+  const ratioLabel = `1:${ratioNum.toFixed(1)}`
+
+  let yieldPct = extractionYieldFromRatio(espresso, ratioNum)
 
   if (roast === 'light') {
     tempC -= 1
@@ -93,16 +110,12 @@ function computeSpecs({
     yieldPct -= 0.15
   }
 
-  const ratioNum = waterOrYield / dose
-  const ratioLabel = `1:${ratioNum.toFixed(1)}`
-
-  if (!espresso && ratioNum > 17) {
-    tds -= 0.06
-    yieldPct -= 0.35
-  }
-  if (!espresso && ratioNum < 15) {
-    tds += 0.07
-    yieldPct += 0.4
+  if (!espresso) {
+    if (ratioNum > 17) {
+      tds -= 0.06
+    } else if (ratioNum < 15) {
+      tds += 0.07
+    }
   }
 
   return {

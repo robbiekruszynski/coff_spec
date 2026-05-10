@@ -230,6 +230,64 @@ export function enrichPourStages(stages, totalG, doseG = null, { espresso = fals
   })
 }
 
+/**
+ * Build ordered timeline for time-based pour charts. Inserts gap segments (0 ml/s)
+ * when stage start times leave space (e.g. AeroPress steep before press).
+ */
+export function buildPourFlowTimeline(rows) {
+  if (!rows?.length) {
+    return {
+      segments: [],
+      totalSec: 0,
+      maxMlPerSec: 0,
+      activePourSec: 0,
+      peakMlPerSec: 0,
+    }
+  }
+  const sorted = [...rows].sort((a, b) => a.time - b.time)
+  const segments = []
+  let cursor = 0
+  for (let i = 0; i < sorted.length; i += 1) {
+    const r = sorted[i]
+    const start = Number(r.time) || 0
+    const dur = Number(r.duration) || 0
+    const end = start + dur
+    if (start > cursor) {
+      segments.push({
+        startSec: cursor,
+        endSec: start,
+        mlPerSec: 0,
+        ml: 0,
+        label: 'Pause',
+        isGap: true,
+      })
+    }
+    segments.push({
+      startSec: start,
+      endSec: end,
+      mlPerSec: Number(r.mlPerSec) || 0,
+      ml: Number(r.ml) || 0,
+      label: r.label,
+      isGap: false,
+    })
+    cursor = Math.max(cursor, end)
+  }
+  const totalSec = cursor
+  const rates = segments.map((s) => s.mlPerSec)
+  const maxMlPerSec = Math.max(...rates, 1e-6)
+  const peakMlPerSec = Math.max(...rates, 0)
+  const activePourSec = segments
+    .filter((s) => !s.isGap)
+    .reduce((acc, s) => acc + (s.endSec - s.startSec), 0)
+  return {
+    segments,
+    totalSec,
+    maxMlPerSec,
+    activePourSec,
+    peakMlPerSec,
+  }
+}
+
 /** MM:SS from seconds (floor). */
 export function formatMmSs(totalSec) {
   const s = Math.max(0, Math.floor(totalSec))

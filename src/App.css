@@ -452,6 +452,106 @@
   margin-top: 0.25rem;
 }
 
+.lab__chart-timecharts {
+  margin-top: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.lab__chart-subtitle {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #d4c4b4;
+}
+
+.lab__flow-note {
+  margin: 0 0 0.65rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: #7a6d63;
+}
+
+.lab__flow-note strong {
+  color: #9e8f84;
+}
+
+.lab__flow-svg-wrap {
+  border-radius: 0.4rem;
+  border: 1px solid #2a2420;
+  background: #1a1613;
+  padding: 0.35rem 0.5rem 0.15rem;
+}
+
+.lab__flow-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  vertical-align: middle;
+}
+
+.lab__flow-axis-label {
+  fill: #6b5f56;
+  font-size: 9px;
+  font-family: 'DM Mono', ui-monospace, monospace;
+}
+
+.lab__flow-axis-line {
+  stroke: #3d3630;
+  stroke-width: 1;
+}
+
+.lab__flow-grid-v,
+.lab__flow-grid-h {
+  stroke: #27211d;
+  stroke-width: 1;
+}
+
+.lab__flow-tick {
+  fill: #6b5f56;
+  font-size: 9px;
+  font-family: 'DM Mono', ui-monospace, monospace;
+}
+
+.lab__flow-tick--y {
+  text-anchor: start;
+}
+
+.lab__flow-outline {
+  stroke: var(--lab-amber);
+}
+
+.lab__cum-fill {
+  fill: rgba(212, 130, 26, 0.12);
+}
+
+.lab__cum-line {
+  stroke: #c9b8a8;
+  stroke-width: 1.75;
+  vector-effect: non-scaling-stroke;
+}
+
+.lab__flow-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 0.5rem 1rem;
+  margin: 0.6rem 0 0;
+  font-size: 0.78rem;
+}
+
+.lab__flow-stats dt {
+  margin: 0;
+  color: #6b5f56;
+  font-weight: 500;
+}
+
+.lab__flow-stats dd {
+  margin: 0.1rem 0 0;
+  color: #e8ddd0;
+  font-family: 'DM Mono', ui-monospace, monospace;
+}
+
 .lab__timer {
   padding: 0.5rem 0 0;
   text-align: left;
