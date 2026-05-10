@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   BREW_GUIDES,
   BREW_METHODS,
   BREW_METHOD_GROUP_META,
   DOSE_MODES,
+  ESPRESSO_SHOT_BREW_METHOD_ID,
+  getBrewMethodLabel,
   getIdealLiquorGrams,
   IDEAL_BATCH_RATIOS,
   IDEAL_ESPRESSO_YIELD_RATIOS,
@@ -154,6 +156,8 @@ export default function App() {
   const [recipeName, setRecipeName] = useState('')
   const [recipeNotes, setRecipeNotes] = useState('')
 
+  const lastBatchBrewMethodRef = useRef('v60')
+
   const espresso = mode === 'espresso'
   const auto = doseMode === 'auto'
 
@@ -219,7 +223,7 @@ export default function App() {
       name: recipeName.trim(),
       notes: recipeNotes.trim(),
       mode,
-      brewMethod,
+      brewMethod: espresso ? ESPRESSO_SHOT_BREW_METHOD_ID : brewMethod,
       roast,
       processing,
       doseMode,
@@ -238,8 +242,18 @@ export default function App() {
 
   const handleLoadRecipe = (r) => {
     resetBrewTimer()
-    setMode(r.mode ?? 'batch')
-    setBrewMethod(r.brewMethod ?? 'v60')
+    const nextMode = r.mode ?? 'batch'
+    setMode(nextMode)
+    if (nextMode === 'espresso') {
+      setBrewMethod(ESPRESSO_SHOT_BREW_METHOD_ID)
+    } else {
+      const bid =
+        r.brewMethod && r.brewMethod !== ESPRESSO_SHOT_BREW_METHOD_ID
+          ? r.brewMethod
+          : 'v60'
+      setBrewMethod(bid)
+      lastBatchBrewMethodRef.current = bid
+    }
     setRoast(r.roast ?? 'medium')
     setProcessing(r.processing ?? 'washed')
     const dm = r.doseMode ?? 'auto'
@@ -279,7 +293,16 @@ export default function App() {
                       : 'lab__segment-btn'
                   }
                   onClick={() => {
-                    setMode(m.id)
+                    const next = m.id
+                    if (next === 'espresso') {
+                      if (brewMethod !== ESPRESSO_SHOT_BREW_METHOD_ID) {
+                        lastBatchBrewMethodRef.current = brewMethod
+                      }
+                      setBrewMethod(ESPRESSO_SHOT_BREW_METHOD_ID)
+                    } else {
+                      setBrewMethod(lastBatchBrewMethodRef.current)
+                    }
+                    setMode(next)
                     setDose(null)
                     setWater(null)
                     setDoseMode('auto')
@@ -293,11 +316,13 @@ export default function App() {
 
           <section className="lab__section lab__section--method">
             <div className="lab__method-header">
-              <h2 className="lab__label">Brew Method</h2>
+              <h2 className="lab__label">
+                {espresso ? 'Espresso setup' : 'Brew Method'}
+              </h2>
               <p className="lab__method-active" aria-live="polite">
                 <span className="lab__method-active-label">Selected</span>
                 <span className="lab__method-active-name">
-                  {BREW_METHODS.find((m) => m.id === brewMethod)?.label ?? '—'}
+                  {getBrewMethodLabel(brewMethod)}
                 </span>
                 <span className="lab__method-active-ratio">
                   {espresso
@@ -306,73 +331,77 @@ export default function App() {
                 </span>
               </p>
             </div>
-            <div className="lab__method-groups">
-              {BREW_METHOD_GROUP_META.map((g) => {
-                const methodsInGroup = BREW_METHODS.filter((m) => m.group === g.id)
-                if (methodsInGroup.length === 0) return null
-                return (
-                  <div key={g.id} className="lab__method-group">
-                    <div className="lab__method-group-head">
-                      <h3 className="lab__method-group-title">{g.label}</h3>
-                      <p className="lab__method-group-hint">{g.hint}</p>
+            {espresso ? (
+              <div className="lab__espresso-focus">
+                <p className="lab__espresso-focus-lead">
+                  You’re dialing an <strong>espresso shot</strong> (dose in the basket
+                  and beverage yield in the cup). The pour chart uses a simple{' '}
+                  <strong>preinfusion + main flow</strong> model—not a filter brew
+                  schedule.
+                </p>
+                <p className="lab__espresso-focus-hint">
+                  Use dose &amp; yield below; switch to <strong>Custom</strong> for your
+                  machine’s recipe. Batch brew methods return when you switch back to
+                  Batch Brew mode.
+                </p>
+              </div>
+            ) : (
+              <div className="lab__method-groups">
+                {BREW_METHOD_GROUP_META.map((g) => {
+                  const methodsInGroup = BREW_METHODS.filter((m) => m.group === g.id)
+                  if (methodsInGroup.length === 0) return null
+                  return (
+                    <div key={g.id} className="lab__method-group">
+                      <div className="lab__method-group-head">
+                        <h3 className="lab__method-group-title">{g.label}</h3>
+                        <p className="lab__method-group-hint">{g.hint}</p>
+                      </div>
+                      <div className="lab__method-grid">
+                        {methodsInGroup.map((m) => {
+                          const batchR = IDEAL_BATCH_RATIOS[m.id] ?? 16.5
+                          const espR = IDEAL_ESPRESSO_YIELD_RATIOS[m.id] ?? 2
+                          return (
+                            <button
+                              key={m.id}
+                              type="button"
+                              className={
+                                brewMethod === m.id
+                                  ? 'lab__method-card lab__method-card--active'
+                                  : 'lab__method-card'
+                              }
+                              aria-pressed={brewMethod === m.id}
+                              onClick={() => {
+                                resetBrewTimer()
+                                setBrewMethod(m.id)
+                              }}
+                            >
+                              <span className="lab__method-card-name">{m.label}</span>
+                              <span className="lab__method-card-metrics">
+                                <span className="lab__method-card-metric">
+                                  Brew water{' '}
+                                  <strong className="lab__method-card-strong">
+                                    1:{batchR.toFixed(1)}
+                                  </strong>
+                                </span>
+                                <span className="lab__method-card-dot" aria-hidden>
+                                  ·
+                                </span>
+                                <span className="lab__method-card-metric lab__method-card-metric--muted">
+                                  Esp. yield{' '}
+                                  <strong className="lab__method-card-strong">
+                                    1:{espR.toFixed(1)}
+                                  </strong>
+                                </span>
+                              </span>
+                            </button>
+                          )
+                        })}
+                      </div>
                     </div>
-                    <div className="lab__method-grid">
-                      {methodsInGroup.map((m) => {
-                        const batchR = IDEAL_BATCH_RATIOS[m.id] ?? 16.5
-                        const espR = IDEAL_ESPRESSO_YIELD_RATIOS[m.id] ?? 2
-                        return (
-                          <button
-                            key={m.id}
-                            type="button"
-                            className={
-                              brewMethod === m.id
-                                ? 'lab__method-card lab__method-card--active'
-                                : 'lab__method-card'
-                            }
-                            aria-pressed={brewMethod === m.id}
-                            onClick={() => {
-                              resetBrewTimer()
-                              setBrewMethod(m.id)
-                            }}
-                          >
-                            <span className="lab__method-card-name">{m.label}</span>
-                            <span className="lab__method-card-metrics">
-                              <span
-                                className={
-                                  espresso
-                                    ? 'lab__method-card-metric lab__method-card-metric--muted'
-                                    : 'lab__method-card-metric'
-                                }
-                              >
-                                Brew water{' '}
-                                <strong className="lab__method-card-strong">
-                                  1:{batchR.toFixed(1)}
-                                </strong>
-                              </span>
-                              <span className="lab__method-card-dot" aria-hidden>
-                                ·
-                              </span>
-                              <span
-                                className={
-                                  espresso
-                                    ? 'lab__method-card-metric'
-                                    : 'lab__method-card-metric lab__method-card-metric--muted'
-                                }
-                              >
-                                Esp. yield{' '}
-                                <strong className="lab__method-card-strong">
-                                  1:{espR.toFixed(1)}
-                                </strong>
-                              </span>
-                            </span>
-                          </button>
-                        )
-                      })}
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
+                  )
+                })}
+              </div>
+            )}
           </section>
 
           <section className="lab__section">
@@ -440,7 +469,9 @@ export default function App() {
                         >
                           <span className="lab__saved-recipe-name">{r.name}</span>
                           <span className="lab__saved-recipe-meta">
-                            {BREW_METHODS.find((m) => m.id === r.brewMethod)?.label}{' '}
+                            {(r.mode === 'espresso'
+                              ? 'Espresso'
+                              : getBrewMethodLabel(r.brewMethod ?? 'v60'))}{' '}
                             ·{' '}
                             {r.dose != null &&
                             (r.liquorTarget != null || r.water != null)
@@ -509,7 +540,7 @@ export default function App() {
                       1:
                       {(IDEAL_ESPRESSO_YIELD_RATIOS[brewMethod] ?? 2).toFixed(1)}{' '}
                       yield for{' '}
-                      {BREW_METHODS.find((m) => m.id === brewMethod)?.label}. Adjust
+                      {getBrewMethodLabel(brewMethod)}. Adjust
                       dose; yield follows.
                     </>
                   ) : (
@@ -517,7 +548,7 @@ export default function App() {
                       1:
                       {(IDEAL_BATCH_RATIOS[brewMethod] ?? 16.5).toFixed(1)} brew ratio
                       for{' '}
-                      {BREW_METHODS.find((m) => m.id === brewMethod)?.label}. Adjust
+                      {getBrewMethodLabel(brewMethod)}. Adjust
                       dose; water follows.
                     </>
                   )}
@@ -786,7 +817,7 @@ export default function App() {
         notes={recipeNotes}
         setNotes={setRecipeNotes}
         summary={{
-          methodLabel: BREW_METHODS.find((m) => m.id === brewMethod)?.label ?? '',
+          methodLabel: getBrewMethodLabel(brewMethod),
           roastLabel: ROAST_LEVELS.find((r) => r.id === roast)?.label ?? '',
           processingLabel:
             PROCESSING_METHODS.find((p) => p.id === processing)?.label ?? '',

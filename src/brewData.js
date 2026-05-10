@@ -5,6 +5,9 @@ export const MODES = [
   { id: 'espresso', label: 'Espresso' },
 ]
 
+/** Brew method id when Mode = Espresso (not V60, Chemex, etc.). */
+export const ESPRESSO_SHOT_BREW_METHOD_ID = 'espresso-shot'
+
 /** AUTO mode: water (g) per 1 g coffee — target ~1:ratio for batch brew. */
 export const IDEAL_BATCH_RATIOS = {
   v60: 16.5,
@@ -16,6 +19,7 @@ export const IDEAL_BATCH_RATIOS = {
   clever: 15.5,
   'cold-brew': 8,
   walkure: 16.5,
+  [ESPRESSO_SHOT_BREW_METHOD_ID]: 16.5,
 }
 
 /** AUTO mode: beverage yield (g) per 1 g dry dose — espresso 1:r. */
@@ -29,6 +33,7 @@ export const IDEAL_ESPRESSO_YIELD_RATIOS = {
   clever: 2,
   'cold-brew': 2,
   walkure: 2,
+  [ESPRESSO_SHOT_BREW_METHOD_ID]: 2,
 }
 
 export const DOSE_MODES = [
@@ -83,6 +88,12 @@ export const BREW_METHOD_GROUP_META = [
     hint: 'Long, cool steep — dial dilution after concentrate.',
   },
 ]
+
+/** Display label for brew method id (incl. espresso shot). */
+export function getBrewMethodLabel(methodId) {
+  if (methodId === ESPRESSO_SHOT_BREW_METHOD_ID) return 'Espresso'
+  return BREW_METHODS.find((m) => m.id === methodId)?.label ?? '—'
+}
 
 /**
  * Multi-stage pour profiles: time = start (s), duration (s), percent of total water.
@@ -475,5 +486,19 @@ export const BREW_GUIDES = {
       'Exceptionally clear cups with fine aromatics; rewards gentle technique and medium-fine grind.',
     roastNote:
       'Lighter roasts may need slightly hotter water; porcelain holds heat steadily.',
+  },
+  [ESPRESSO_SHOT_BREW_METHOD_ID]: {
+    title: 'Espresso',
+    lead: 'Pressurized basket extraction: grind, dose, and yield set concentration; time and temperature tune balance.',
+    steps: [
+      'Preheat portafilter and cup; dry the basket before dosing.',
+      'Distribute and tamp evenly to avoid channeling.',
+      'Start the shot—watch preinfusion then main flow for color and mass.',
+      'Stop at target yield or time; taste and adjust grind or ratio next shot.',
+    ],
+    closing:
+      'Dense, aromatic cups with crema-driven body; small ratio changes have an outsized impact.',
+    roastNote:
+      'Softer pressure profiles or longer preinfusion can lift clarity in lighter roasts.',
   },
 }

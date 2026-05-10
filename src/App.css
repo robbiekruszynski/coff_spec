@@ -203,6 +203,36 @@
   margin-bottom: 0.4rem;
 }
 
+.lab__espresso-focus {
+  padding: 0.6rem 0.65rem;
+  border-radius: 0.45rem;
+  border: 1px solid #342c26;
+  background: rgba(212, 130, 26, 0.06);
+}
+
+.lab__espresso-focus-lead {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #cbbfb3;
+}
+
+.lab__espresso-focus-lead strong {
+  color: #e8ddd0;
+  font-weight: 600;
+}
+
+.lab__espresso-focus-hint {
+  margin: 0.5rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: #7a6d63;
+}
+
+.lab__espresso-focus-hint strong {
+  color: #9e8f84;
+}
+
 .lab__method-active {
   margin: 0;
   padding: 0.45rem 0.65rem;
