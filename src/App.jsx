@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import {
   BREW_GUIDES,
   BREW_METHODS,
+  BREW_METHOD_GROUP_META,
   DOSE_MODES,
   getIdealLiquorGrams,
   IDEAL_BATCH_RATIOS,
@@ -290,26 +291,87 @@ export default function App() {
             </div>
           </section>
 
-          <section className="lab__section">
-            <h2 className="lab__label">Brew Method</h2>
-            <div className="lab__chips lab__chips--scroll">
-              {BREW_METHODS.map((m) => (
-                <button
-                  key={m.id}
-                  type="button"
-                  className={
-                    brewMethod === m.id
-                      ? 'lab__chip lab__chip--active'
-                      : 'lab__chip'
-                  }
-                  onClick={() => {
-                    resetBrewTimer()
-                    setBrewMethod(m.id)
-                  }}
-                >
-                  {m.label}
-                </button>
-              ))}
+          <section className="lab__section lab__section--method">
+            <div className="lab__method-header">
+              <h2 className="lab__label">Brew Method</h2>
+              <p className="lab__method-active" aria-live="polite">
+                <span className="lab__method-active-label">Selected</span>
+                <span className="lab__method-active-name">
+                  {BREW_METHODS.find((m) => m.id === brewMethod)?.label ?? '—'}
+                </span>
+                <span className="lab__method-active-ratio">
+                  {espresso
+                    ? `Auto yield 1:${(IDEAL_ESPRESSO_YIELD_RATIOS[brewMethod] ?? 2).toFixed(1)}`
+                    : `Auto water 1:${(IDEAL_BATCH_RATIOS[brewMethod] ?? 16.5).toFixed(1)}`}
+                </span>
+              </p>
+            </div>
+            <div className="lab__method-groups">
+              {BREW_METHOD_GROUP_META.map((g) => {
+                const methodsInGroup = BREW_METHODS.filter((m) => m.group === g.id)
+                if (methodsInGroup.length === 0) return null
+                return (
+                  <div key={g.id} className="lab__method-group">
+                    <div className="lab__method-group-head">
+                      <h3 className="lab__method-group-title">{g.label}</h3>
+                      <p className="lab__method-group-hint">{g.hint}</p>
+                    </div>
+                    <div className="lab__method-grid">
+                      {methodsInGroup.map((m) => {
+                        const batchR = IDEAL_BATCH_RATIOS[m.id] ?? 16.5
+                        const espR = IDEAL_ESPRESSO_YIELD_RATIOS[m.id] ?? 2
+                        return (
+                          <button
+                            key={m.id}
+                            type="button"
+                            className={
+                              brewMethod === m.id
+                                ? 'lab__method-card lab__method-card--active'
+                                : 'lab__method-card'
+                            }
+                            aria-pressed={brewMethod === m.id}
+                            onClick={() => {
+                              resetBrewTimer()
+                              setBrewMethod(m.id)
+                            }}
+                          >
+                            <span className="lab__method-card-name">{m.label}</span>
+                            <span className="lab__method-card-metrics">
+                              <span
+                                className={
+                                  espresso
+                                    ? 'lab__method-card-metric lab__method-card-metric--muted'
+                                    : 'lab__method-card-metric'
+                                }
+                              >
+                                Brew water{' '}
+                                <strong className="lab__method-card-strong">
+                                  1:{batchR.toFixed(1)}
+                                </strong>
+                              </span>
+                              <span className="lab__method-card-dot" aria-hidden>
+                                ·
+                              </span>
+                              <span
+                                className={
+                                  espresso
+                                    ? 'lab__method-card-metric'
+                                    : 'lab__method-card-metric lab__method-card-metric--muted'
+                                }
+                              >
+                                Esp. yield{' '}
+                                <strong className="lab__method-card-strong">
+                                  1:{espR.toFixed(1)}
+                                </strong>
+                              </span>
+                            </span>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </section>
 

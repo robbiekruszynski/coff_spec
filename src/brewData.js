@@ -54,15 +54,34 @@ export function getIdealLiquorGrams(espresso, brewMethod, doseG) {
 }
 
 export const BREW_METHODS = [
-  { id: 'v60', label: 'V60' },
-  { id: 'chemex', label: 'Chemex' },
-  { id: 'aeropress', label: 'AeroPress' },
-  { id: 'french-press', label: 'French Press' },
-  { id: 'eva-solo', label: 'Eva Solo' },
-  { id: 'kalita-wave', label: 'Kalita Wave' },
-  { id: 'clever', label: 'Clever Dripper' },
-  { id: 'cold-brew', label: 'Cold Brew' },
-  { id: 'walkure', label: 'Walküre' },
+  { id: 'v60', label: 'V60', group: 'pour' },
+  { id: 'chemex', label: 'Chemex', group: 'pour' },
+  { id: 'kalita-wave', label: 'Kalita Wave', group: 'pour' },
+  { id: 'walkure', label: 'Walküre', group: 'pour' },
+  { id: 'aeropress', label: 'AeroPress', group: 'steep' },
+  { id: 'french-press', label: 'French Press', group: 'steep' },
+  { id: 'eva-solo', label: 'Eva Solo', group: 'steep' },
+  { id: 'clever', label: 'Clever Dripper', group: 'steep' },
+  { id: 'cold-brew', label: 'Cold Brew', group: 'cold' },
+]
+
+/** Section headers for the brew method picker (order preserved). */
+export const BREW_METHOD_GROUP_META = [
+  {
+    id: 'pour',
+    label: 'Pour-over & drip',
+    hint: 'Filter percolation — pulses control drawdown.',
+  },
+  {
+    id: 'steep',
+    label: 'Immersion & hybrid',
+    hint: 'Steep, press, or release — contact time drives strength.',
+  },
+  {
+    id: 'cold',
+    label: 'Cold extraction',
+    hint: 'Long, cool steep — dial dilution after concentrate.',
+  },
 ]
 
 /**
