@@ -1353,3 +1353,745 @@
   opacity: 0.45;
   cursor: not-allowed;
 }
+
+/* ADDED: subtitle under title */
+.lab__tagline {
+  position: relative;
+  z-index: 1;
+  margin: 0.5rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: #9e8f84;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  max-width: 36rem;
+}
+
+/* ADDED: method cards — wrap grid, no horizontal scroll */
+.lab__method-scroller-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.lab__method-scroller-group-label {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #7a6d63;
+}
+
+.lab__method-scroller {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.25rem, 1fr));
+  gap: 0.65rem;
+  padding: 0.35rem 0 0.35rem;
+}
+
+.lab__mcard {
+  width: auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  padding: 0.65rem 0.75rem;
+  text-align: left;
+  border-radius: 0.55rem;
+  border: 1px solid #332b26;
+  background: linear-gradient(165deg, #181411 0%, #12100e 100%);
+  color: #e8ddd0;
+  font: inherit;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03);
+  position: relative;
+}
+
+.lab__mcard:hover {
+  transform: translateY(-3px);
+  border-color: #5c4d42;
+}
+
+.lab__mcard:focus-visible {
+  outline: 2px solid var(--lab-amber);
+  outline-offset: 2px;
+}
+
+.lab__mcard--active {
+  border-color: var(--lab-amber);
+  transform: scale(1.03);
+  box-shadow:
+    0 0 16px rgba(212, 130, 26, 0.4),
+    0 0 0 1px rgba(212, 130, 26, 0.35);
+}
+
+.lab__mcard:has(.lab__mcard-badge) {
+  padding-top: 1.85rem;
+}
+
+.lab__mcard-name {
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: #f0e8df;
+}
+
+.lab__mcard-cat {
+  font-size: 0.72rem;
+  color: #8a7b70;
+}
+
+.lab__mcard-ratio-chip {
+  font-family: 'DM Mono', ui-monospace, monospace;
+  font-size: 0.78rem;
+  color: var(--lab-amber);
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(212, 130, 26, 0.1);
+  border: 1px solid #342c26;
+}
+
+.lab__mcard-last {
+  font-size: 0.68rem;
+  color: #6b5f56;
+  line-height: 1.3;
+  margin-top: 0.15rem;
+}
+
+.lab__mcard-badge {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.45rem;
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #161210;
+  background: var(--lab-amber-muted);
+  padding: 0.12rem 0.35rem;
+  border-radius: 999px;
+}
+
+/* ADDED: My Recipes panel */
+.lab__my-recipes {
+  border: 1px solid #2a2420;
+  border-radius: 0.75rem;
+  background: #120f0d;
+  padding: 0.85rem 1rem 1rem;
+  position: relative;
+}
+
+.lab__my-recipes-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  margin-bottom: 0.75rem;
+}
+
+.lab__my-recipes-title {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #9e8f84;
+}
+
+.lab__my-recipes-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.lab__my-recipes-linkish {
+  padding: 0.35rem 0.5rem;
+  border: none;
+  background: transparent;
+  color: #9e8f84;
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  min-height: 44px;
+}
+
+.lab__my-recipes-linkish:hover:not(:disabled) {
+  color: var(--lab-amber);
+}
+
+.lab__my-recipes-linkish:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.lab__my-recipes-add {
+  padding: 0.45rem 0.85rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--lab-amber);
+  background: var(--lab-amber);
+  color: #161210;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 44px;
+  transition: filter 0.15s ease;
+}
+
+.lab__my-recipes-add:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.lab__my-recipes-add:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.lab__my-recipes-add--block {
+  width: 100%;
+}
+
+.lab__my-recipes-empty-card {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  border-radius: 0.55rem;
+  border: 1px dashed #342c26;
+  background: #161210;
+  color: #9e8f84;
+}
+
+.lab__my-recipes-empty-card p {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+}
+
+.lab__my-recipes-empty-plus {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  border: 2px solid var(--lab-amber);
+  background: rgba(212, 130, 26, 0.12);
+  color: var(--lab-amber);
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lab__my-recipes-scroller {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.25rem, 1fr));
+  gap: 0.6rem;
+  padding-bottom: 0.35rem;
+}
+
+.lab__recipe-mini {
+  min-width: 0;
+  display: flex;
+  align-items: stretch;
+  border-radius: 0.55rem;
+  border: 1px solid #332b26;
+  background: linear-gradient(165deg, #181411 0%, #12100e 100%);
+  overflow: hidden;
+}
+
+.lab__recipe-mini-load {
+  flex: 1;
+  text-align: left;
+  padding: 0.55rem 0.6rem;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.lab__recipe-mini-load:hover {
+  background: rgba(212, 130, 26, 0.06);
+}
+
+.lab__recipe-mini-badge {
+  display: inline-block;
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #161210;
+  background: var(--lab-amber-muted);
+  padding: 0.1rem 0.35rem;
+  border-radius: 999px;
+  margin-bottom: 0.35rem;
+}
+
+.lab__recipe-mini-name {
+  display: block;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: #f0e8df;
+}
+
+.lab__recipe-mini-meta {
+  display: block;
+  font-size: 0.72rem;
+  color: #8a7b70;
+  margin-top: 0.2rem;
+}
+
+.lab__recipe-mini-tools {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #2a2420;
+}
+
+.lab__recipe-mini-icon {
+  flex: 1;
+  min-width: 44px;
+  min-height: 44px;
+  border: none;
+  background: #241f1b;
+  color: #9e8f84;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.lab__recipe-mini-icon:hover {
+  background: #342c26;
+  color: var(--lab-amber);
+}
+
+.lab__my-recipes-sticky-mobile {
+  display: none;
+}
+
+.lab__visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ADDED: dose row + ratio chip */
+.lab__dose-hint--short {
+  margin: 0;
+}
+
+.lab__dose-water-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: stretch;
+}
+
+.lab__ratio-between {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-height: 48px;
+}
+
+.lab__ratio-between-arrow {
+  color: #5c534a;
+  font-size: 0.85rem;
+  user-select: none;
+}
+
+.lab__ratio-between-core {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.lab__ratio-chip-live {
+  font-family: 'DM Mono', ui-monospace, monospace;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--lab-amber);
+  letter-spacing: -0.02em;
+  transition:
+    opacity 0.15s ease,
+    color 0.15s ease;
+}
+
+.lab__ratio-strength {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #9e8f84;
+  transition:
+    opacity 0.15s ease,
+    color 0.15s ease;
+}
+
+.lab__ratio-strength--muted {
+  opacity: 0.45;
+}
+
+.lab__ratio-strength--strong,
+.lab__ratio-strength--rich {
+  color: #c9a888;
+}
+
+.lab__ratio-strength--balanced {
+  color: var(--lab-amber-muted);
+}
+
+.lab__ratio-strength--light {
+  color: #8a9ec4;
+}
+
+/* ADDED: sticky chart tabs */
+.lab__chart-tabs--sticky {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #0e0c0a;
+  padding-top: 0.5rem;
+  margin-top: 0.35rem;
+  margin-bottom: 0.35rem;
+  border-bottom: 1px solid #2a2420;
+}
+
+.lab__chart-panel {
+  min-height: 8rem;
+}
+
+/* ADDED: onboarding */
+.lab__onboard-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(8, 6, 5, 0.65);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 1rem;
+}
+
+@media (min-width: 640px) {
+  .lab__onboard-overlay {
+    align-items: center;
+  }
+}
+
+.lab__onboard-card {
+  position: relative;
+  width: 100%;
+  max-width: 22rem;
+  padding: 1.25rem 1.25rem 1.1rem;
+  border-radius: 0.75rem;
+  border: 1px solid #342c26;
+  background: #161210;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+.lab__onboard-dismiss {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: transparent;
+  color: #9e8f84;
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 0.35rem;
+}
+
+.lab__onboard-dismiss:hover {
+  color: var(--lab-amber);
+}
+
+.lab__onboard-step {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #6b5f56;
+}
+
+.lab__onboard-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.15rem;
+  color: #e8ddd0;
+  font-weight: 500;
+}
+
+.lab__onboard-body {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: #9e8f84;
+}
+
+.lab__onboard-next {
+  padding: 0.55rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--lab-amber);
+  background: var(--lab-amber);
+  color: #161210;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  min-height: 48px;
+}
+
+/* ADDED: timer — pulse + stages */
+.lab__timer-display--countdown {
+  font-size: clamp(5rem, 14vw, 6rem);
+  max-width: 100%;
+}
+
+.lab__timer-display--pulse {
+  animation: lab-timer-clock-pulse 0.4s ease;
+}
+
+@keyframes lab-timer-clock-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.lab__timer-btn--wide {
+  min-height: 64px;
+  min-width: 6.5rem;
+}
+
+.lab__timer-btn--outline {
+  background: transparent;
+  border: 1px solid var(--lab-amber-muted);
+  color: var(--lab-amber-muted);
+}
+
+.lab__timer-btn--outline:hover:not(:disabled) {
+  border-color: var(--lab-amber);
+  color: var(--lab-amber);
+}
+
+.lab__timer-next--prominent {
+  font-size: 1.05rem;
+  color: #e8ddd0;
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.45rem;
+  background: rgba(212, 130, 26, 0.08);
+  border: 1px solid #342c26;
+}
+
+.lab__timer-stage--current {
+  background: rgba(212, 130, 26, 0.12);
+  box-shadow: 0 0 0 1px rgba(212, 130, 26, 0.45);
+}
+
+.lab__timer-stage--current .lab__timer-stage-mark {
+  color: var(--lab-amber);
+}
+
+.lab__timer-stage--flash {
+  animation: lab-timer-stage-flash 0.4s ease;
+}
+
+@keyframes lab-timer-stage-flash {
+  0%,
+  100% {
+    background: rgba(212, 130, 26, 0.12);
+  }
+  40% {
+    background: rgba(212, 130, 26, 0.35);
+  }
+}
+
+.lab__timer-feedback {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border-radius: 0.65rem;
+  border: 1px solid #342c26;
+  background: rgba(212, 130, 26, 0.05);
+}
+
+.lab__timer-feedback-title {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  color: #e8ddd0;
+  font-weight: 500;
+}
+
+.lab__timer-feedback-moods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.lab__timer-feedback-btn {
+  flex: 1 1 auto;
+  min-height: 44px;
+  padding: 0.45rem 0.65rem;
+  border-radius: 0.45rem;
+  border: 1px solid #3b332f;
+  background: #161210;
+  color: #e8ddd0;
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.lab__timer-feedback-btn--active {
+  border-color: var(--lab-amber);
+  background: rgba(212, 130, 26, 0.15);
+}
+
+.lab__timer-feedback-note-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  color: #9e8f84;
+  margin-bottom: 0.75rem;
+}
+
+.lab__timer-feedback-textarea {
+  font-family: inherit;
+  resize: vertical;
+}
+
+.lab__timer-feedback-save {
+  padding: 0.55rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--lab-amber);
+  background: var(--lab-amber);
+  color: #161210;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 48px;
+}
+
+.lab__timer-feedback-save:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.lab__timer-feedback-saved {
+  margin: 0.65rem 0 0;
+  font-size: 0.85rem;
+  color: #9e8f84;
+}
+
+.lab__custom-recipe-base {
+  margin: -0.5rem 0 1rem;
+  font-size: 0.85rem;
+  color: #9e8f84;
+}
+
+@media (min-width: 768px) {
+  .lab__dose-water-row {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+
+  .lab__dose-water-row .lab__input-block {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .lab__ratio-between {
+    flex: 0 0 auto;
+    padding: 0 0.25rem 1.75rem;
+    min-width: 7rem;
+  }
+
+  .lab__timer-controls {
+    flex-direction: row;
+  }
+}
+
+@media (max-width: 767px) {
+  .lab__ratio-chip-live {
+    font-size: 20px;
+  }
+
+  .lab__ratio-between {
+    width: 100%;
+    order: 2;
+  }
+
+  .lab__dose-water-row .lab__input-block:first-child {
+    order: 1;
+  }
+
+  .lab__dose-water-row .lab__input-block:last-child {
+    order: 3;
+  }
+
+  .lab__input--dose {
+    min-height: 56px;
+    font-size: 18px;
+  }
+
+  .lab__timer-display--countdown {
+    font-size: max(80px, 18vw);
+    text-align: center;
+  }
+
+  .lab__timer-controls {
+    flex-direction: column;
+  }
+
+  .lab__timer-btn--wide,
+  .lab__timer-btn--primary,
+  .lab__timer-btn--outline {
+    width: 100%;
+  }
+
+  .lab__timer-stage {
+    min-height: 48px;
+    align-items: center;
+  }
+
+  .lab__my-recipes-actions .lab__my-recipes-add {
+    display: none;
+  }
+
+  .lab__my-recipes-sticky-mobile {
+    display: block;
+    position: sticky;
+    bottom: 0;
+    margin: 0.75rem -1rem -1rem;
+    padding: 0.65rem 1rem calc(0.65rem + env(safe-area-inset-bottom, 0));
+    background: linear-gradient(180deg, transparent 0%, #0e0c0a 35%);
+    border-top: 1px solid #2a2420;
+    z-index: 5;
+  }
+
+  .lab__onboard-card {
+    margin-bottom: env(safe-area-inset-bottom, 0);
+  }
+}

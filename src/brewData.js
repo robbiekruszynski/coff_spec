@@ -95,6 +95,66 @@ export function getBrewMethodLabel(methodId) {
   return BREW_METHODS.find((m) => m.id === methodId)?.label ?? '—'
 }
 
+/** Sensible default dose (g) per method on first load / method change. */
+export const DEFAULT_DOSES_BY_METHOD = {
+  v60: 20,
+  chemex: 25,
+  aeropress: 15,
+  'french-press': 30,
+  'kalita-wave': 20,
+  clever: 20,
+  'cold-brew': 100,
+  'eva-solo': 25,
+  walkure: 20,
+}
+
+export const DEFAULT_ESPRESSO_DOSE_G = 18
+
+/** Visual method cards (batch mode). */
+export const METHOD_CARD_ICONS = {
+  v60: '☕',
+  chemex: '🫙',
+  aeropress: '💉',
+  'french-press': '🫖',
+  'kalita-wave': '〰️',
+  clever: '🔽',
+  'cold-brew': '🧊',
+  'eva-solo': '🫗',
+  walkure: '⚗️',
+}
+
+/** One-line brew type for cards (matches BREW_METHOD_GROUP_META ids). */
+export const METHOD_BREW_CATEGORY_LABEL = {
+  pour: 'Pour-over',
+  steep: 'Immersion',
+  cold: 'Cold',
+}
+
+export function defaultDoseForBatchMethod(methodId) {
+  return DEFAULT_DOSES_BY_METHOD[methodId] ?? 20
+}
+
+/** Last second of the pour schedule (for timer countdown to end of recipe). */
+export function getScheduleEndSecondsFromRows(rows) {
+  if (!rows?.length) return 0
+  return Math.max(0, ...rows.map((r) => r.time + r.duration))
+}
+
+/** Enriched pour rows for timer/chart sharing (no calculation changes). */
+export function getEnrichedPourRows(espresso, brewMethodId, totalG, doseG) {
+  const { stages } = getPourStagesForBrew(espresso, brewMethodId)
+  const g = Number(totalG) || 0
+  if (g <= 0) {
+    return stages.map((s) => ({
+      ...s,
+      ml: 0,
+      mlPerSec: 0,
+      fractionOfBrew: 0,
+    }))
+  }
+  return enrichPourStages(stages, g, doseG, { espresso })
+}
+
 /**
  * Multi-stage pour profiles: time = start (s), duration (s), percent of total water.
  */
